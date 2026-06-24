@@ -42,14 +42,28 @@ export function CalendarView({ refreshKey }: { refreshKey: number }) {
 
   const addEvent = async () => {
     if (!selectedDate || !newTitle) return
-    await fetch("/api/events", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ title: newTitle, date: format(selectedDate, "yyyy-MM-dd") }) })
+    try {
+      const res = await fetch("/api/events", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ title: newTitle, date: format(selectedDate, "yyyy-MM-dd") }) })
+      if (!res.ok) { const err = await res.json().catch(() => ({ error: "Failed to add event" })); alert(err.error); return }
+    } catch { alert("Network error"); return }
     setNewTitle(""); setSelectedDate(null); fetchEvents()
   }
 
   const updateEvent = async (id: string) => {
     if (!editTitle.trim()) return
-    await fetch("/api/events", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id, title: editTitle }) })
+    try {
+      const res = await fetch("/api/events", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id, title: editTitle }) })
+      if (!res.ok) { const err = await res.json().catch(() => ({ error: "Failed to update event" })); alert(err.error); return }
+    } catch { alert("Network error"); return }
     setEditingId(null); setEditTitle(""); fetchEvents()
+  }
+
+  const deleteEvent = async (id: string) => {
+    try {
+      const res = await fetch(`/api/events?id=${id}`, { method: "DELETE" })
+      if (!res.ok) { const err = await res.json().catch(() => ({ error: "Failed to delete event" })); alert(err.error); return }
+    } catch { alert("Network error"); return }
+    fetchEvents()
   }
 
   return (
@@ -108,7 +122,7 @@ export function CalendarView({ refreshKey }: { refreshKey: number }) {
                         <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => { setEditingId(e.id); setEditTitle(e.title) }}>
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
                         </Button>
-                        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={async () => { await fetch(`/api/events?id=${e.id}`, { method: "DELETE" }); fetchEvents() }}>
+                        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => deleteEvent(e.id)}>
                           <Trash2 size={13} className="text-muted-foreground" />
                         </Button>
                       </div>
