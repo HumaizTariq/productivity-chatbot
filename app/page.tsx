@@ -74,9 +74,9 @@ export default function Dashboard() {
               <div className="text-[10px] uppercase tracking-[0.08em] text-muted-foreground font-light mb-2">Today at a Glance</div>
               <div className="font-serif italic text-xl text-gold mb-5">A productive {format(new Date(), "EEEE")} awaits</div>
               <div className="flex gap-8">
-                <div><span className="font-mono text-3xl font-medium text-foreground group-hover:text-gold transition-colors">3</span><div className="text-[10px] uppercase tracking-[0.05em] text-muted-foreground font-light mt-1">Tasks due</div></div>
-                <div><span className="font-mono text-3xl font-medium text-foreground group-hover:text-gold transition-colors">2</span><div className="text-[10px] uppercase tracking-[0.05em] text-muted-foreground font-light mt-1">Events today</div></div>
-                <div><span className="font-mono text-3xl font-medium text-foreground group-hover:text-gold transition-colors">5</span><div className="text-[10px] uppercase tracking-[0.05em] text-muted-foreground font-light mt-1">Notes</div></div>
+                <div><span className="font-mono text-3xl font-medium text-foreground group-hover:text-gold transition-colors">{upcomingTasks.length}</span><div className="text-[10px] uppercase tracking-[0.05em] text-muted-foreground font-light mt-1">Tasks due</div></div>
+                <div><span className="font-mono text-3xl font-medium text-foreground group-hover:text-gold transition-colors">{todayEvents.length}</span><div className="text-[10px] uppercase tracking-[0.05em] text-muted-foreground font-light mt-1">Events today</div></div>
+                <div><span className="font-mono text-3xl font-medium text-foreground group-hover:text-gold transition-colors">{notes.length}</span><div className="text-[10px] uppercase tracking-[0.05em] text-muted-foreground font-light mt-1">Notes</div></div>
               </div>
             </div>
 
@@ -87,15 +87,15 @@ export default function Dashboard() {
               <div className="flex flex-col">
                 <div className="flex flex-col gap-1 px-3 py-3.5 rounded-lg hover:bg-foreground/[0.03] transition-colors mb-0.5">
                   <span className="text-[13px] text-foreground">Tasks completed</span>
-                  <span className="font-mono text-[22px] font-medium text-gold">7 / 10</span>
+                  <span className="font-mono text-[22px] font-medium text-gold">{tasks.filter(t => t.status === 'done').length} / {tasks.length}</span>
                 </div>
                 <div className="flex flex-col gap-1 px-3 py-3.5 rounded-lg hover:bg-foreground/[0.03] transition-colors mb-0.5">
                   <span className="text-[13px] text-foreground">Notes this week</span>
-                  <span className="font-mono text-[22px] font-medium text-gold">12</span>
+                  <span className="font-mono text-[22px] font-medium text-gold">{notes.length}</span>
                 </div>
                 <div className="flex flex-col gap-1 px-3 py-3.5 rounded-lg hover:bg-foreground/[0.03] transition-colors">
                   <span className="text-[13px] text-foreground">Events upcoming</span>
-                  <span className="font-mono text-[22px] font-medium text-gold">4</span>
+                  <span className="font-mono text-[22px] font-medium text-gold">{events.filter(e => new Date(e.date) >= new Date()).length}</span>
                 </div>
               </div>
             </div>
