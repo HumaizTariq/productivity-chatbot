@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Sparkles } from "lucide-react"
+import Link from "next/link"
 
 export function AuthForm({ mode }: { mode: "login" | "register" }) {
   const [email, setEmail] = useState("")
@@ -63,9 +64,9 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
 
       <p className="text-sm text-center text-muted-foreground mt-6">
         {mode === "login" ? (
-          <>New here? <a href="/register" className="text-gold hover:underline font-medium">Create account</a></>
+          <>New here? <Link href="/register" className="text-gold hover:underline font-medium">Create account</Link></>
         ) : (
-          <>Have an account? <a href="/login" className="text-gold hover:underline font-medium">Sign in</a></>
+          <>Have an account? <Link href="/login" className="text-gold hover:underline font-medium">Sign in</Link></>
         )}
       </p>
     </div>
