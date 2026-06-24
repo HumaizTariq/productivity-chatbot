@@ -22,7 +22,13 @@ export function NoteList({ refreshKey }: { refreshKey: number }) {
 
   useEffect(() => { fetchNotes() }, [refreshKey])
 
-  const deleteNote = async (id: string) => { await fetch(`/api/notes?id=${id}`, { method: "DELETE" }); fetchNotes() }
+  const deleteNote = async (id: string) => {
+    try {
+      const res = await fetch(`/api/notes?id=${id}`, { method: "DELETE" })
+      if (!res.ok) { const err = await res.json().catch(() => ({ error: "Failed to delete note" })); alert(err.error); return }
+    } catch { alert("Network error — please check your connection."); return }
+    fetchNotes()
+  }
 
   return (
     <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
