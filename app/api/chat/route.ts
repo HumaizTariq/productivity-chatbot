@@ -67,6 +67,7 @@ export async function POST(request: NextRequest) {
   // Execute command if present
   let created: { type: string } | undefined
   if (command) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let parsed: any
     try {
       parsed = JSON.parse(command)
