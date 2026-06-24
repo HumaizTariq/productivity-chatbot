@@ -79,34 +79,37 @@ export async function POST(request: NextRequest) {
       try {
         const data = parsed.data ?? {}
         switch (parsed.action) {
-          case "create_task":
-            await supabase.from("tasks").insert({
+          case "create_task": {
+            const { error } = await supabase.from("tasks").insert({
               user_id: user.id,
               title: data.title,
               description: data.description,
               priority: data.priority ?? "medium",
               due_date: data.due_date,
             })
-            created = { type: "task" }
+            if (!error) created = { type: "task" }
             break
-          case "create_note":
-            await supabase.from("notes").insert({
+          }
+          case "create_note": {
+            const { error } = await supabase.from("notes").insert({
               user_id: user.id,
               title: data.title,
               content: data.content,
             })
-            created = { type: "note" }
+            if (!error) created = { type: "note" }
             break
-          case "create_event":
-            await supabase.from("events").insert({
+          }
+          case "create_event": {
+            const { error } = await supabase.from("events").insert({
               user_id: user.id,
               title: data.title,
               date: data.date,
               time: data.time,
               all_day: data.all_day ?? false,
             })
-            created = { type: "event" }
+            if (!error) created = { type: "event" }
             break
+          }
         }
       } catch (e) {
         console.error("Command execution failed:", e)
