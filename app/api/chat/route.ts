@@ -67,6 +67,7 @@ export async function POST(request: NextRequest) {
   // Execute command if present
   let created: { type: string } | undefined
   if (command) {
+    // ponytail: `any` is fine here — LLM output shape is unpredictable. If this gets a real schema, type with a discriminated union.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let parsed: any
     try {

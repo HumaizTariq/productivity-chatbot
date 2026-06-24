@@ -42,6 +42,7 @@ export function TaskForm({ task, onSaved }: TaskFormProps) {
     const res = await fetch("/api/tasks", { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
     if (!res.ok) {
       const err = await res.json().catch(() => ({ error: "Failed to save task" }))
+      // ponytail: alert() is simplest feedback. Upgrade to inline toast/error banner if UX requires it.
       alert(err.error || "Failed to save task")
       return
     }
