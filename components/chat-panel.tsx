@@ -29,12 +29,15 @@ export function ChatPanel({ onDataChanged }: { onDataChanged?: () => void }) {
 
     try {
       const res = await fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: text }) })
-      if (!res.ok) throw new Error("Chat request failed")
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: "Chat request failed" }))
+        throw new Error(err.error || "Chat request failed")
+      }
       const data = await res.json()
       setMessages((prev) => [...prev, { id: crypto.randomUUID(), role: "assistant", content: data.reply }])
       if (data.created) onDataChanged?.()
-    } catch {
-      setMessages((prev) => [...prev, { id: crypto.randomUUID(), role: "assistant", content: "Sorry, something went wrong. Please try again." }])
+    } catch (e) {
+      setMessages((prev) => [...prev, { id: crypto.randomUUID(), role: "assistant", content: e instanceof Error ? e.message : "Sorry, something went wrong. Please try again." }])
     }
     setLoading(false)
   }
