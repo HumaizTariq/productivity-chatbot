@@ -67,40 +67,47 @@ export async function POST(request: NextRequest) {
   // Execute command if present
   let created: { type: string } | undefined
   if (command) {
+    let parsed: any
     try {
-      const parsed = JSON.parse(command)
-      switch (parsed.action) {
-        case "create_task":
-          await supabase.from("tasks").insert({
-            user_id: user.id,
-            title: parsed.data.title,
-            description: parsed.data.description,
-            priority: parsed.data.priority ?? "medium",
-            due_date: parsed.data.due_date,
-          })
-          created = { type: "task" }
-          break
-        case "create_note":
-          await supabase.from("notes").insert({
-            user_id: user.id,
-            title: parsed.data.title,
-            content: parsed.data.content,
-          })
-          created = { type: "note" }
-          break
-        case "create_event":
-          await supabase.from("events").insert({
-            user_id: user.id,
-            title: parsed.data.title,
-            date: parsed.data.date,
-            time: parsed.data.time,
-            all_day: parsed.data.all_day ?? false,
-          })
-          created = { type: "event" }
-          break
-      }
+      parsed = JSON.parse(command)
     } catch {
-      // If JSON parsing fails, just respond with the text
+      parsed = null
+    }
+    if (parsed) {
+      try {
+        switch (parsed.action) {
+          case "create_task":
+            await supabase.from("tasks").insert({
+              user_id: user.id,
+              title: parsed.data.title,
+              description: parsed.data.description,
+              priority: parsed.data.priority ?? "medium",
+              due_date: parsed.data.due_date,
+            })
+            created = { type: "task" }
+            break
+          case "create_note":
+            await supabase.from("notes").insert({
+              user_id: user.id,
+              title: parsed.data.title,
+              content: parsed.data.content,
+            })
+            created = { type: "note" }
+            break
+          case "create_event":
+            await supabase.from("events").insert({
+              user_id: user.id,
+              title: parsed.data.title,
+              date: parsed.data.date,
+              time: parsed.data.time,
+              all_day: parsed.data.all_day ?? false,
+            })
+            created = { type: "event" }
+            break
+        }
+      } catch (e) {
+        console.error("Command execution failed:", e)
+      }
     }
   }
 
