@@ -39,7 +39,12 @@ export function TaskForm({ task, onSaved }: TaskFormProps) {
     const body = task
       ? { id: task.id, title, description, priority, due_date: dueDate || null }
       : { title, description, priority, due_date: dueDate || null }
-    await fetch("/api/tasks", { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+    const res = await fetch("/api/tasks", { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: "Failed to save task" }))
+      alert(err.error || "Failed to save task")
+      return
+    }
     setTitle(""); setDescription(""); setPriority("medium"); setDueDate("")
     setOpen(false)
     onSaved()

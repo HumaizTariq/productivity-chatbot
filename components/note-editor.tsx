@@ -19,7 +19,12 @@ export function NoteEditor({ note, onSaved, children }: NoteEditorProps) {
     e.preventDefault()
     const method = note ? "PATCH" : "POST"
     const body = note ? { id: note.id, title, content } : { title, content }
-    await fetch("/api/notes", { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+    const res = await fetch("/api/notes", { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: "Failed to save note" }))
+      alert(err.error || "Failed to save note")
+      return
+    }
     setOpen(false)
     onSaved()
   }
