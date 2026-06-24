@@ -23,6 +23,7 @@ export function TaskForm({ task, onSaved }: TaskFormProps) {
   const [description, setDescription] = useState(task?.description ?? "")
   const [priority, setPriority] = useState(task?.priority ?? "medium")
   const [dueDate, setDueDate] = useState(task?.due_date ?? "")
+  const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
     if (open) {
@@ -35,20 +36,27 @@ export function TaskForm({ task, onSaved }: TaskFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const method = task ? "PATCH" : "POST"
-    const body = task
-      ? { id: task.id, title, description, priority, due_date: dueDate || null }
-      : { title, description, priority, due_date: dueDate || null }
-    const res = await fetch("/api/tasks", { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({ error: "Failed to save task" }))
-      // ponytail: alert() is simplest feedback. Upgrade to inline toast/error banner if UX requires it.
-      alert(err.error || "Failed to save task")
-      return
+    setSubmitting(true)
+    try {
+      const method = task ? "PATCH" : "POST"
+      const body = task
+        ? { id: task.id, title, description, priority, due_date: dueDate || null }
+        : { title, description, priority, due_date: dueDate || null }
+      const res = await fetch("/api/tasks", { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: "Failed to save task" }))
+        // ponytail: alert() is simplest feedback. Upgrade to inline toast/error banner if UX requires it.
+        alert(err.error || "Failed to save task")
+        return
+      }
+      setTitle(""); setDescription(""); setPriority("medium"); setDueDate("")
+      setOpen(false)
+      onSaved()
+    } catch {
+      alert("Network error — please check your connection and try again.")
+    } finally {
+      setSubmitting(false)
     }
-    setTitle(""); setDescription(""); setPriority("medium"); setDueDate("")
-    setOpen(false)
-    onSaved()
   }
 
   return (
@@ -70,7 +78,7 @@ export function TaskForm({ task, onSaved }: TaskFormProps) {
             </SelectContent>
           </Select>
           <Input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} className="rounded-xl bg-input" />
-          <Button type="submit" className="w-full rounded-xl bg-gold text-background hover:bg-gold/90">{task ? "Save Changes" : "Create Task"}</Button>
+          <Button type="submit" disabled={submitting} className="w-full rounded-xl bg-gold text-background hover:bg-gold/90 disabled:opacity-50">{task ? "Save Changes" : "Create Task"}</Button>
         </form>
       </DialogContent>
     </Dialog>
