@@ -18,9 +18,9 @@ export default function Dashboard() {
   const [chatOpen, setChatOpen] = useState(false)
 
   const fetchAll = useCallback(() => {
-    fetch("/api/tasks").then((r) => r.json()).then(setTasks)
-    fetch("/api/notes").then((r) => r.json()).then(setNotes)
-    fetch("/api/events").then((r) => r.json()).then(setEvents)
+    fetch("/api/tasks").then((r) => r.ok ? r.json() : []).then(setTasks)
+    fetch("/api/notes").then((r) => r.ok ? r.json() : []).then(setNotes)
+    fetch("/api/events").then((r) => r.ok ? r.json() : []).then(setEvents)
   }, [])
 
   useEffect(() => { fetchAll() }, [fetchAll])

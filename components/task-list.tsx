@@ -32,11 +32,20 @@ export function TaskList({ refreshKey }: { refreshKey: number }) {
 
   const toggleStatus = async (task: Task) => {
     const newStatus = task.status === "done" ? "todo" : "done"
-    await fetch("/api/tasks", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: task.id, status: newStatus }) })
+    try {
+      const res = await fetch("/api/tasks", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: task.id, status: newStatus }) })
+      if (!res.ok) { const err = await res.json().catch(() => ({ error: "Failed to update task" })); alert(err.error); return }
+    } catch { alert("Network error — please check your connection."); return }
     fetchTasks()
   }
 
-  const deleteTask = async (id: string) => { await fetch(`/api/tasks?id=${id}`, { method: "DELETE" }); fetchTasks() }
+  const deleteTask = async (id: string) => {
+    try {
+      const res = await fetch(`/api/tasks?id=${id}`, { method: "DELETE" })
+      if (!res.ok) { const err = await res.json().catch(() => ({ error: "Failed to delete task" })); alert(err.error); return }
+    } catch { alert("Network error — please check your connection."); return }
+    fetchTasks()
+  }
 
   if (tasks.length === 0) return (
     <div className="text-center py-16">

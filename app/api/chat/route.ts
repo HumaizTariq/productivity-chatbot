@@ -77,32 +77,33 @@ export async function POST(request: NextRequest) {
     }
     if (parsed) {
       try {
+        const data = parsed.data ?? {}
         switch (parsed.action) {
           case "create_task":
             await supabase.from("tasks").insert({
               user_id: user.id,
-              title: parsed.data.title,
-              description: parsed.data.description,
-              priority: parsed.data.priority ?? "medium",
-              due_date: parsed.data.due_date,
+              title: data.title,
+              description: data.description,
+              priority: data.priority ?? "medium",
+              due_date: data.due_date,
             })
             created = { type: "task" }
             break
           case "create_note":
             await supabase.from("notes").insert({
               user_id: user.id,
-              title: parsed.data.title,
-              content: parsed.data.content,
+              title: data.title,
+              content: data.content,
             })
             created = { type: "note" }
             break
           case "create_event":
             await supabase.from("events").insert({
               user_id: user.id,
-              title: parsed.data.title,
-              date: parsed.data.date,
-              time: parsed.data.time,
-              all_day: parsed.data.all_day ?? false,
+              title: data.title,
+              date: data.date,
+              time: data.time,
+              all_day: data.all_day ?? false,
             })
             created = { type: "event" }
             break
