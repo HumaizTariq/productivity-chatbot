@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState, useCallback } from "react"
+import { useRouter } from "next/navigation"
 import { Sidebar } from "@/components/sidebar"
 import { ChatPanel } from "@/components/chat-panel"
 import { format, isSameDay, parseISO } from "date-fns"
@@ -16,12 +17,19 @@ export default function Dashboard() {
   const [notes, setNotes] = useState<Note[]>([])
   const [events, setEvents] = useState<Event[]>([])
   const [chatOpen, setChatOpen] = useState(false)
+  const router = useRouter()
 
   const fetchAll = useCallback(() => {
-    fetch("/api/tasks").then((r) => r.ok ? r.json() : []).then(setTasks)
-    fetch("/api/notes").then((r) => r.ok ? r.json() : []).then(setNotes)
-    fetch("/api/events").then((r) => r.ok ? r.json() : []).then(setEvents)
-  }, [])
+    fetch("/api/tasks").then((r) => {
+      if (r.status === 401) router.push("/login"); return r.ok ? r.json() : []
+    }).then(setTasks)
+    fetch("/api/notes").then((r) => {
+      if (r.status === 401) router.push("/login"); return r.ok ? r.json() : []
+    }).then(setNotes)
+    fetch("/api/events").then((r) => {
+      if (r.status === 401) router.push("/login"); return r.ok ? r.json() : []
+    }).then(setEvents)
+  }, [router])
 
   useEffect(() => { fetchAll() }, [fetchAll])
 
