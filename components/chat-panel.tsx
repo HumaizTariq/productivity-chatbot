@@ -15,7 +15,7 @@ export function ChatPanel({ onDataChanged }: { onDataChanged?: () => void }) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
 
-  useEffect(() => { fetch("/api/chat").then((r) => r.json()).then(setMessages) }, [])
+  useEffect(() => { fetch("/api/chat").then((r) => r.ok ? r.json() : []).then(setMessages) }, [])
 
   useEffect(() => { if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight }, [messages])
 
