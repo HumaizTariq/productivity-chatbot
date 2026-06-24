@@ -1,0 +1,93 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e3]:
+      - heading "Productivity" [level=1] [ref=e5]
+      - link "New chat" [ref=e7] [cursor=pointer]:
+        - /url: /chat
+        - img [ref=e8]
+        - text: New chat
+      - navigation [ref=e9]:
+        - link "Dashboard" [ref=e10] [cursor=pointer]:
+          - /url: /
+          - img [ref=e11]
+          - text: Dashboard
+        - link "Tasks" [ref=e16] [cursor=pointer]:
+          - /url: /tasks
+          - img [ref=e17]
+          - text: Tasks
+        - link "Notes" [ref=e20] [cursor=pointer]:
+          - /url: /notes
+          - img [ref=e21]
+          - text: Notes
+        - link "Calendar" [ref=e24] [cursor=pointer]:
+          - /url: /calendar
+          - img [ref=e25]
+          - text: Calendar
+      - button "Log out" [ref=e28]:
+        - img [ref=e29]
+        - text: Log out
+    - main [ref=e32]:
+      - generic [ref=e33]:
+        - generic [ref=e34]:
+          - generic [ref=e35]:
+            - heading "Dashboard" [level=1] [ref=e36]
+            - paragraph [ref=e37]: Sunday, June 21
+          - button "Ask AI" [ref=e38]:
+            - img [ref=e39]
+            - text: Ask AI
+        - generic [ref=e42]:
+          - generic [ref=e43]:
+            - generic [ref=e44]: Today at a Glance
+            - generic [ref=e45]: A productive Sunday awaits
+            - generic [ref=e46]:
+              - generic [ref=e47]:
+                - text: "3"
+                - generic [ref=e48]: Tasks due
+              - generic [ref=e49]:
+                - text: "2"
+                - generic [ref=e50]: Events today
+              - generic [ref=e51]:
+                - text: "5"
+                - generic [ref=e52]: Notes
+          - generic [ref=e53]:
+            - generic [ref=e54]: Quick Stats
+            - generic [ref=e55]:
+              - generic [ref=e56]:
+                - generic [ref=e57]: Tasks completed
+                - generic [ref=e58]: 7 / 10
+              - generic [ref=e59]:
+                - generic [ref=e60]: Notes this week
+                - generic [ref=e61]: "12"
+              - generic [ref=e62]:
+                - generic [ref=e63]: Events upcoming
+                - generic [ref=e64]: "4"
+        - generic [ref=e65]:
+          - generic [ref=e66]:
+            - heading "Recent Notes" [level=2] [ref=e67]
+            - generic [ref=e83]:
+              - generic [ref=e84]: Shopping list
+              - generic [ref=e85]: Jun 20
+            - generic [ref=e86]:
+              - generic [ref=e87]: Debug note
+              - generic [ref=e88]: Jun 20
+            - generic [ref=e89]:
+              - generic [ref=e90]: Meeting notes
+              - generic [ref=e91]: Jun 20
+            - link "View all →" [ref=e69] [cursor=pointer]:
+              - /url: /notes
+          - generic [ref=e70]:
+            - heading "Upcoming Tasks" [level=2] [ref=e71]
+            - generic [ref=e92]:
+              - generic [ref=e95]: Urgent bug fix
+              - generic [ref=e96]: High
+            - generic [ref=e97]:
+              - generic [ref=e100]: Buy groceries
+              - generic [ref=e101]: Med
+            - generic [ref=e102]:
+              - generic [ref=e105]: Test the calendar feature
+              - generic [ref=e106]: Med
+            - link "View all →" [ref=e73] [cursor=pointer]:
+              - /url: /tasks
+  - button "Open Next.js Dev Tools" [ref=e79] [cursor=pointer]:
+    - img [ref=e80]
+  - alert [ref=e107]
